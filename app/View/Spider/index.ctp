@@ -16,7 +16,6 @@
   New wiki: <input name="url_name" id="wpurl" type="text" value="/wiki/<?=substr($gen['Spidergen']['wp_url'],30)?>" />&nbsp;&nbsp;<button type="button" onclick="add_rem_spid()">(spider)</button><br/><br/>
   <button type="submit">Next</button><br/>
   <div>Next: <input type="number" name="x" value="<?=$x?>" /><br/><br/></div>
-  <!-- <button type="submit" class="btn btn-success btn-lg btn-block" onclick="stuff()">Curl REQ</button> -->
   <input name="y" type="hidden" value="<?=$y?>" />
   <input name="cur_id" type="hidden" value="<?=$gen['Spidergen']['id']?>" />
 </form>

@@ -37,7 +37,7 @@ class AppController extends Controller {
   }
   
   public function beforeRender(){
-    $this->set('all_systems',$this->GameSystem->get_all());
+
   }
   
  // alert  -- setFlash() wrapper

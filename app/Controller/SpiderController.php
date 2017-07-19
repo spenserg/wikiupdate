@@ -20,15 +20,10 @@ class SpiderController extends AppController {
         $this->Spidergen->save();
       }
     }
-    if ($z = $this->Spidergen->find('all',array('conditions'=>array('nmbe_id >='=>$x,'num_species'=>1,'only_author'=>0),'order'=>'nmbe_id','limit'=>5))){
-      $x = $z[0]['Spidergen']['nmbe_id'];
-    }else{
-      $x = 1;
-    } 
-    
+    $x = 1; //NMBE id
     $y = ($y != -1) ? $y : count($this->Spidergen->find('all',array('conditions'=>array('nmbe_id >='=>$x,'num_species'=>1,'only_author'=>0))));
     
-    $this->set('taxobox',$t=spider_taxobox('http://www.wsc.nmbe.ch/genus/'.$x));
+    $this->set('taxobox',$t = spider_taxobox('http://www.wsc.nmbe.ch/genus/'.$x));
     $this->set('gen',$gen = $this->Spidergen->find('first',array('conditions'=>array('nmbe_id'=>$x))));
     $this->set('redir_html','#REDIRECT [['.$t['genus'][1].']]
     
