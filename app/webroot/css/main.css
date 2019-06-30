@@ -1,65 +1,3 @@
-@font-face {
-	font-family: 'ArcadeClassic';
-	src: url('fonts/Other/Arcade/Arcade Classic.eot');
-	src: local('☺1'), url('fonts/Other/Arcade/Arcade Classic.woff') format('woff'), url('fonts/Other/Arcade/Arcade Classic.ttf') format('truetype'), url('fonts/Other/Arcade/Arcade Classic.svg') format('svg');
-}
-@font-face {
-	font-family: 'Atari';
-	src: url('fonts/Atari/Atari.eot');
-	src: local('☺2'), url('fonts/Atari/Atari.woff') format('woff'), url('fonts/Atari/Atari.ttf') format('truetype'), url('fonts/Atari/Atari.svg') format('svg');
-}
-@font-face {
-	font-family: 'FinalFantasy';
-	src: url('fonts/Game/FinalFantasy/finalf.eot');
-	src: local('☺3'), url('fonts/Game/FinalFantasy/finalf.woff') format('woff'), url('fonts/Game/FinalFantasy/finalf.ttf') format('truetype'), url('fonts/Game/FinalFantasy/finalf.svg') format('svg');
-}
-@font-face {
-	font-family: 'Mario';
-	src: url('fonts/Game/Mario/Mario.eot');
-	src: local('☺4'), url('fonts/Game/Mario/Mario.woff') format('woff'), url('fonts/Game/Mario/Mario.ttf') format('truetype'), url('fonts/Game/Mario/Mario.svg') format('svg');
-}
-@font-face {
-	font-family: 'OldComputer';
-	src: url('fonts/Other/OldComputer/silkworm.eot');
-	src: local('☺10'), url('fonts/Other/OldComputer/silkworm.woff') format('woff'), url('fonts/Other/OldComputer/silkworm.ttf') format('truetype'), url('fonts/Other/OldComputer/silkworm.svg') format('svg');
-}
-@font-face {
-	font-family: 'Pacman';
-	src: url('fonts/Game/Pacman/vd__.eot');
-	src: local('☺5'), url('fonts/Game/Pacman/vd__.woff') format('woff'), url('fonts/Game/Pacman/vd__.ttf') format('truetype'), url('fonts/Game/Pacman/vd__.svg') format('svg');
-}
-@font-face {
-	font-family: 'PokemonGB';
-	src: url('fonts/Game/PokemonGB/PokemonGB.eot');
-	src: local('☺6'), url('fonts/Game/PokemonGB/PokemonGB.woff') format('woff'), url('fonts/Game/PokemonGB/PokemonGB.ttf') format('truetype'), url('fonts/Game/PokemonGB/PokemonGB.svg') format('svg');
-}
-@font-face {
-	font-family: 'PokemonHiragana';
-	src: url('fonts/Game/PokemonHiragana/PokemonHiragana.eot');
-	src: local('☺7'), url('fonts/Game/PokemonHiragana/PokemonHiragana.woff') format('woff'), url('fonts/Game/PokemonHiragana/PokemonHiragana.ttf') format('truetype'), url('fonts/Game/PokemonHiragana/PokemonHiragana.svg') format('svg');
-}
-@font-face {
-	font-family: 'PokemonKatakana';
-	src: url('fonts/Game/PokemonKatakana/PokemonKatakana.eot');
-	src: local('☺8'), url('fonts/Game/PokemonKatakana/PokemonKatakana.woff') format('woff'), url('fonts/Game/PokemonKatakana/PokemonKatakana.ttf') format('truetype'), url('fonts/Game/PokemonKatakana/PokemonKatakana.svg') format('svg');
-}
-@font-face {
-	font-family: 'PokemonUnown';
-	src: url('fonts/Game/PokemonUnown/PokemonUnown.eot');
-	src: local('☺9'), url('fonts/Game/PokemonUnown/PokemonUnown.woff') format('woff'), url('fonts/Game/PokemonUnown/PokemonUnown.ttf') format('truetype'), url('fonts/Game/PokemonUnown/PokemonUnown.svg') format('svg');
-}
-@font-face {
-	font-family: 'Spac3';
-	src: url('fonts/Other/Spac3/Spac3.eot');
-	src: local('☺10'), url('fonts/Other/Spac3/Spac3.woff') format('woff'), url('fonts/Other/Spac3/Spac3.ttf') format('truetype'), url('fonts/Other/Spac3/Spac3.svg') format('svg');
-}
-
-.container{
-	/*
-	 * background-color:#dff0d8;
-	 */
-}
-
 .dropdown{
 	margin-top:8px;
 }
@@ -67,15 +5,6 @@
 .dropdown-toggle{
 	background-color:#ccc;
 	border-color:black;
-}
-
-.gameview{
-	background-color:white;
-	color:black;
-}
-
-.gameview-Atari{
-	background-color:#82FEFD
 }
 
 .navbar{
@@ -95,17 +24,9 @@
 	border-color:black;
 }
 
-.well-game{
-	background-color:#EDEDED;
-	border: 2px black solid;
-	margin-top:5px;
+.syn_link:link {
+	color: red;
 }
-
-.well-game-Atari{
-	border: 5px #FF4EF6 solid;
-	background-color: #FFFA53
-	/*
-	font-family: 'Atari', Fallback, Verdana;
-	font-size: 10px;
-	*/
+.syn_link:visited {
+	color:blue;
 }
