@@ -783,9 +783,3 @@ function spider_info($id, $gen_data = []){
 
 Configure::write('debug', 2);        // 0,1,2(max)  => amount of debug/warning messages
 Configure::write('App.test_mode', true); // use sandbox systems?
- 
-// ---- Xbox Achievements ----
-Configure::write('App.xbox_xuid', '2533274972074496');
-Configure::write('App.xbox_xuid_auth', 'e9ac30dbc18f45784c45f9330aa457b056e0ebda');
-
-

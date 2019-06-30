@@ -9,15 +9,6 @@ class SpiderController extends AppController {
   public function beforeFilter(){
     parent::beforeFilter();
   }
-  
-  public function index($x=3133,$y=-1){
-    if ($this->request->is('post')){
-      $x = $_POST['x'];
-      $y = $_POST['y'];
-      if (isset($_POST['url_name'])){
-        $this->Spidergen->read(null,$_POST['cur_id']);
-        $this->Spidergen->set(array('wp_url'=>'https://en.wikipedia.org'.$_POST['url_name']));
-        $this->Spidergen->save();
 
   public function ref() {
     $ref = [];
@@ -46,6 +37,41 @@ class SpiderController extends AppController {
     $this->set('old', $old);
   }
   }
+  public function fams($fam_id = 114) {
+    if ($this->request->is('post')) {
+      $fam_id = intval($_POST['next_id']);
+    }
+
+    //Get Family
+    if (!($fam = $this->Spiderfam->find('first', array('conditions' => array('id' => $fam_id))))) {
+      $fam = $this->Spiderfam->find('first', array('conditions' => array('id' => 114)));
+      $fam_id = 114;
+    }
+
+    $str = "==Genera==\n" . as_of() .
+      ", the [[World Spider Catalog]] accepts the following genera:" .
+      "<ref name=NMBE>{{cite web| title=Family: " . $fam['Spiderfam']['name'] . " " . $fam['Spiderfam']['auth'] .
+      "| website=World Spider Catalog| accessdate=" . date("Y-m-d") .
+      "| publisher=Natural History Museum Bern| url=http://www.wsc.nmbe.ch/family/" . $fam['Spiderfam']['nmbe_id'] . "}}</ref>" .
+      "\n";
+
+    $html = get_html('http://www.wsc.nmbe.ch/family/' . $fam['Spiderfam']['nmbe_id']);
+
+    // Locations
+    $locs = [];
+    foreach(get_all_matches($html, '/<div\s*class\s*\=\s*\"speciesTitle[^\d]+\d+\/([^\_]+)\_[^\,]+\,\s*\d{4}[^\|]+\|[^\|]+\|\s*([^\s][^\&]+[^\s])\s*\&nbsp\;/') as $val) {
+      if (!array_key_exists(trim($val[1]), $locs)) {
+        $locs[trim($val[1])] = [];
+      }
+      foreach(get_all_matches($val[2], '/(\([^\)]+\))/') as $xal) {
+        $val[2] = str_replace($xal, "", $val[2]);
+      }
+      foreach(explode("|", str_replace(",", "|", str_replace(" to ", "|", trim($val[2])))) as $wal) {
+        if (!in_array(trim($wal), $locs[trim($val[1])])) {
+          array_push($locs[trim($val[1])], trim($wal));
+        }
+      }
+    }
     foreach($locs as $key=>$val) {
       $locs[$key]['main'] = $this->Location->short_list($locs[$key]);
     }
@@ -138,26 +164,6 @@ class SpiderController extends AppController {
         array_push($all_gens, $tmpgen);
       }
     }
-
-[[Category:Redirects to animals]]');
-    
-    $page_html = get_html($gen['Spidergen']['wp_url']);    
-    $this->set('edit_url','https://en.wikipedia.org/w/index.php?title='.$gen['Spidergen']['name'].'&action=edit');
-    $this->set('has_image',(strpos($page_html,'og:image')!==false));
-    
-    $this->set('x',$x+1);
-    $this->set('y',$y-1);
-      
-    /* RECORD ALL GENERA
-    foreach(get_all_matches(get_html('http://www.wsc.nmbe.ch/families'),'/<strong>([a-zA-Z]*)<\/strong>/U') as $key=>$val){
-      debug(($key+1)." of 117 | ".$val[1]);
-      foreach(get_all_matches(get_html('http://www.wsc.nmbe.ch/genlist/'.($key+1).'/'.$val[1]),'/<strong><i>([a-zA-Z]*)<\/i><\/strong>/U') as $wal){
-        $this->Spidergen->create();
-        $this->Spidergen->set(array(
-          'family'=>$val[1],
-          'name'=>$wal[1]
-        ));
-        $this->Spidergen->save();
     $atoz_index++;
     while ($atoz_index < 26) {
       $toc_tag .= "| " . strtolower($atoz[$atoz_index]) . "=";
@@ -228,10 +234,6 @@ class SpiderController extends AppController {
         }
       }
     }
-    /*
-    
-    
-      
   }
   
   public function temp() {
@@ -255,7 +257,57 @@ class SpiderController extends AppController {
         
       }
     }
+  }
+
+  public function index($cur_nmbe_id = 1){
+    if ($this->request->is('post')) {
+      if (isset($_POST['next_id'])) {
+        $cur_nmbe_id = $_POST['next_id'];
       }
+    }
+
+    if ($cur_nmbe_id == 1) {
+      $q = $this->Spidergen->find('first', array('conditions' => array('wp_url' => NULL)));
+      $cur_nmbe_id = ($q ? $q['Spidergen']['nmbe_id'] : $cur_nmbe_id);
+    }
+
+    $si = $this->Spidergen->get_wiki_info($cur_nmbe_id);
+    //$si = $this->Spiderfam->get_info($cur_nmbe_id);
+
+    // DE-ORPHAN TEXT
+    $si['de_orphan_text'] = "==See also==\n*''[[" .
+      (($si['data']['name'] != $si['data']['wp_url']) ? ($si['data']['wp_url'] . "|") : "") . $si['data']['name'] . "]]'', " .
+      get_first_match($si['article'], "/\}\}\s*\'\'\'\'\'[^\']*\'\'\'\'\' is([\s\S]*[\]])[\s\S]*was first described by/") .
+      " named in its honor." . $si['gen_ref']['ref'];
+
+    // WIKIPROJECTS
+    $si = $this->Location->get_project_text($si);
+
+    // TAXO TEMPLATE
+    $si['taxo_template'] = "{{Don't edit this line {{{machine code|}}}\n| rank=genus\n| link=";
+    if ($si['data']['wp_url'] != NULL && $si['data']['wp_url'] != $si['data']['name']) {
+      $si['taxo_template'] .= $si['data']['wp_url'] . "|" . $si['data']['name'];
+    } else {
+      $si['taxo_template'] .= $si['genus'];
+    }
+    $si['taxo_template'] .= "\n| parent=" . $si['family'] .
+      "\n| refs=" . $si['nmbe_ref'] . "\n}}";
+    $si['taxo_template_url'] = "https://en.wikipedia.org/w/index.php?title=Template:Taxonomy/" . $si['genus'] . "&action=edit";
+
+    // REDIR URL
+    $si['redir_url'] = "https://en.wikipedia.org/w/index.php?title=" . $si['genus'] . "&action=edit";
+    $si['redir_html'] = "#REDIRECT [[" . $si['genus'] . "]]";
+    if (count($si['data']['num_species']) == 1) {
+      $si['redir_url'] = "https://en.wikipedia.org/w/index.php?title=" . $si['species'][0]['name'] . "&action=edit";
+    }
+    $si['redir_html'] .= "\n\n{{R " . ((count($si['data']['num_species']) == 1) ? "to monotypic taxon" : "from alternative scientific name") .
+      "|spider}}\n\n[[Category:" . $si['family'] . "]]";
+    if ($next = $this->Spidergen->find('first', array('conditions' => array('nmbe_id !=' => $si['nmbe_id'], 'wp_url' => NULL)))) {
+      $this->set('next_id', $next);
+    }
+    $si['taxobox'] = build_taxobox($si['taxobox']);
+    $si['syn_redir'] = "#REDIRECT [[" . $si['data']['wp_url'] . "]]\n\n{{R from alternative scientific name|spider}}\n\n[[Category:" . $si['family'] . "]]";
+    $this->set('info', $si);
   }
 }
 
